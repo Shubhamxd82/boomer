@@ -1,212 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Destroyer Pro - Python Version</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            min-height: 100vh;
-            color: #fff;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; padding: 40px 0 20px; }
-        .logo {
-            font-size: 3rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff0066, #ff6600);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-        .stat-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-        }
-        .stat-number { font-size: 2rem; font-weight: bold; margin-top: 10px; color: #ff6600; }
-        .attack-form {
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 40px;
-            margin: 40px 0;
-        }
-        input, button {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 15px;
-            font-size: 1rem;
-        }
-        input {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        button {
-            background: linear-gradient(45deg, #ff0066, #ff6600);
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff4757;
-            padding: 10px 20px;
-            border-radius: 50px;
-            color: #fff;
-            text-decoration: none;
-        }
-        .response-area {
-            background: rgba(0,0,0,0.4);
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 30px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: monospace;
-        }
-        .log-success { color: #2ecc71; }
-        .log-error { color: #e74c3c; }
-        .log-info { color: #3498db; }
-        @media (max-width: 768px) {
-            .logo { font-size: 1.8rem; }
-            .btn-group { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-    <a href="/logout" class="logout-btn">🚪 Logout</a>
-    <div class="container">
-        <div class="header">
-            <div class="logo">💀 PHONE DESTROYER PRO (Python) 💀</div>
-            <div class="subtitle">200+ Working APIs | SMS | Call | WhatsApp Bombing</div>
-            <div style="margin-top: 15px; color: #2ecc71;">✅ Welcome, {{ username }}</div>
-        </div>
+import os
+import json
+import time
+import random
+from threading import Thread
+from flask import Flask, render_template, request, redirect, session, jsonify
 
-        <div class="stats-grid">
-            <div class="stat-card"><div>📡 TOTAL APIS</div><div class="stat-number" id="totalApis">0</div></div>
-            <div class="stat-card"><div>💣 ACTIVE ATTACKS</div><div class="stat-number" id="activeAttacks">0</div></div>
-            <div class="stat-card"><div>✅ SUCCESS HITS</div><div class="stat-number" id="totalHits">0</div></div>
-        </div>
+# Setup template folder correctly for Render
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
-        <div class="attack-form">
-            <div class="form-title" style="text-align:center; font-size:1.5rem; margin-bottom:20px;">🎯 LAUNCH DESTRUCTION</div>
-            <input type="text" id="singlePhone" placeholder="Single Target (10 digits) ex: 9876543210" maxlength="10">
-            <input type="text" id="multiPhones" placeholder="Multiple Targets (comma separated)">
-            <div class="btn-group">
-                <button onclick="attackSingle()">🔥 ATTACK SINGLE</button>
-                <button onclick="attackMultiple()">💣 ATTACK MULTIPLE</button>
-                <button onclick="stopAll()">🛑 STOP ALL</button>
-                <button onclick="getStatus()">📊 GET STATUS</button>
-            </div>
-        </div>
+app = Flask(__name__, template_folder=TEMPLATE_DIR)
+app.secret_key = 'phone_destroyer_secret_2024'
 
-        <div class="response-area" id="responseArea">
-            <div class="log-entry log-info">🚀 Python Version Ready | Password: aniket</div>
-            <div class="log-entry log-success">✅ 200+ APIs Loaded Successfully</div>
-        </div>
-    </div>
+# ============ DUMMY APIS (Replace with real later) ============
+ULTIMATE_APIS = [
+    {"name": "Test API 1", "url": "https://httpbin.org/post", "method": "POST", "headers": {"Content-Type": "application/json"}, "data": '{"phone":"{phone}"}'},
+    {"name": "Test API 2", "url": "https://httpbin.org/get?phone={phone}", "method": "GET", "headers": {}, "data": None},
+]
 
-    <script>
-        function updateStats() {
-            fetch('/api/stats')
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById('totalApis').innerText = d.totalApis || 0;
-                    document.getElementById('activeAttacks').innerText = d.activeAttacks || 0;
-                    document.getElementById('totalHits').innerText = d.totalHits || 0;
-                }).catch(e => console.log('Stats error'));
-        }
+SESSIONS_FILE = '/tmp/sessions.json'
+
+def load_sessions():
+    if os.path.exists(SESSIONS_FILE):
+        try:
+            with open(SESSIONS_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def save_sessions(sessions):
+    try:
+        with open(SESSIONS_FILE, 'w') as f:
+            json.dump(sessions, f)
+    except:
+        pass
+
+def send_request(api, phone):
+    try:
+        url = api['url'].replace('{phone}', phone)
+        headers = api['headers'].copy() if api['headers'] else {}
+        headers['User-Agent'] = 'Mozilla/5.0'
         
-        function attackSingle() {
-            const phone = document.getElementById('singlePhone').value;
-            if(!phone || phone.length !== 10) {
-                addLog('❌ Please enter valid 10-digit phone number!', 'error');
-                return;
-            }
-            addLog(`🎯 Launching attack on +91${phone}...`, 'success');
-            fetch('/api/bomb', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({phone: phone})
-            })
-            .then(r => r.json())
-            .then(d => {
-                if(d.status === 'success') addLog(`✅ Attack started on +91${phone}`, 'success');
-                else addLog(`❌ Failed: ${d.message}`, 'error');
-                document.getElementById('singlePhone').value = '';
-                updateStats();
-            });
-        }
-        
-        function attackMultiple() {
-            const phones = document.getElementById('multiPhones').value;
-            if(!phones) { addLog('❌ Please enter phone numbers!', 'error'); return; }
-            addLog(`🎯 Multi-attack on: ${phones}`, 'success');
-            fetch('/api/multibomb', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({phones: phones})
-            })
-            .then(r => r.json())
-            .then(d => {
-                if(d.status === 'success') addLog(`✅ Attack started on ${d.count} targets`, 'success');
-                document.getElementById('multiPhones').value = '';
-                updateStats();
-            });
-        }
-        
-        function stopAll() {
-            addLog('🛑 Stopping all attacks...', 'info');
-            fetch('/api/stopall', {method: 'POST'})
-                .then(r => r.json())
-                .then(d => addLog(`✅ ${d.message}`, 'success'))
-                .then(() => updateStats());
-        }
-        
-        function getStatus() {
-            fetch('/api/status')
-                .then(r => r.json())
-                .then(d => {
-                    addLog(`📊 Active Attacks: ${d.activeAttacks} | Total Hits: ${d.totalHits}`, 'info');
-                    if(d.attacks && d.attacks.length > 0) {
-                        d.attacks.forEach(a => {
-                            addLog(`   📱 +91${a.phone} | Hits: ${a.hits} | Duration: ${a.time}s`, 'success');
-                        });
-                    }
-                });
-        }
-        
-        function addLog(msg, type) {
-            const area = document.getElementById('responseArea');
-            const div = document.createElement('div');
-            div.className = `log-entry log-${type}`;
-            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            area.insertBefore(div, area.firstChild);
-            while(area.children.length > 50) area.removeChild(area.lastChild);
-        }
-        
-        setInterval(updateStats, 5000);
-        updateStats();
-        addLog('💀 Python Version Ready!', 'success');
-    </script>
-</body>
-</html>
+        if api['method'] == 'POST' and api.get('data'):
+            data = api['data'].replace('{phone}', phone)
+            response = requests.post(url, headers=headers, data=data, timeout=5)
+        else:
+            response = requests.get(url, headers=headers, timeout=5)
+        return response.status_code
+    except:
+        return 0
+
+# ============ ROUTES ============
+
+@app.route('/')
+def index():
+    if not session.get('logged_in'):
+        return redirect('/login')
+    return render_template('index.html', username=session.get('username', 'User'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+        if password == 'aniket':
+            session['logged_in'] = True
+            session['username'] = username if username else 'User'
+            return redirect('/')
+        else:
+            return render_template('login.html', error='❌ Wrong password! Password is: aniket')
+    return render_template('login.html', error=None)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
+
+@app.route('/api/stats')
+def api_stats():
+    sessions = load_sessions()
+    total_hits = sum(s.get('hits', 0) for s in sessions.values())
+    return jsonify({
+        'status': 'success',
+        'totalApis': len(ULTIMATE_APIS),
+        'activeAttacks': len(sessions),
+        'totalHits': total_hits
+    })
+
+@app.route('/api/bomb', methods=['POST'])
+def api_bomb():
+    if not session.get('logged_in'):
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
+    data = request.get_json()
+    phone = data.get('phone', '')
+    if not phone or not phone.isdigit() or len(phone) != 10:
+        return jsonify({'status': 'error', 'message': 'Invalid phone number'})
+    
+    sessions = load_sessions()
+    session_id = f"attack_{int(time.time())}"
+    sessions[session_id] = {'phone': phone, 'hits': 0, 'start_time': time.time()}
+    
+    def attack():
+        hits = 0
+        for api in ULTIMATE_APIS:
+            status = send_request(api, phone)
+            if 200 <= status < 300:
+                hits += 1
+            time.sleep(0.1)
+        s = load_sessions()
+        if session_id in s:
+            s[session_id]['hits'] = hits
+            save_sessions(s)
+    
+    Thread(target=attack).start()
+    save_sessions(sessions)
+    return jsonify({'status': 'success', 'session_id': session_id})
+
+@app.route('/api/multibomb', methods=['POST'])
+def api_multibomb():
+    if not session.get('logged_in'):
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
+    data = request.get_json()
+    phones_str = data.get('phones', '')
+    phones = [p.strip() for p in phones_str.split(',')]
+    sessions = load_sessions()
+    started = 0
+    for phone in phones:
+        if phone.isdigit() and len(phone) == 10:
+            session_id = f"multi_{int(time.time())}_{started}"
+            sessions[session_id] = {'phone': phone, 'hits': 0, 'start_time': time.time()}
+            def attack(p, sid):
+                hits = 0
+                for api in ULTIMATE_APIS:
+                    status = send_request(api, p)
+                    if 200 <= status < 300:
+                        hits += 1
+                    time.sleep(0.1)
+                s = load_sessions()
+                if sid in s:
+                    s[sid]['hits'] = hits
+                    save_sessions(s)
+            Thread(target=attack, args=(phone, session_id)).start()
+            started += 1
+            time.sleep(0.5)
+    save_sessions(sessions)
+    return jsonify({'status': 'success', 'count': started})
+
+@app.route('/api/stopall', methods=['POST'])
+def api_stopall():
+    if not session.get('logged_in'):
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
+    save_sessions({})
+    return jsonify({'status': 'success', 'message': 'All attacks stopped'})
+
+@app.route('/api/status')
+def api_status():
+    if not session.get('logged_in'):
+        return jsonify({'status': 'error', 'message': 'Unauthorized'}), 401
+    sessions = load_sessions()
+    attacks = []
+    for sid, s in sessions.items():
+        attacks.append({
+            'phone': s['phone'],
+            'hits': s.get('hits', 0),
+            'time': int(time.time() - s['start_time'])
+        })
+    return jsonify({
+        'status': 'success',
+        'activeAttacks': len(sessions),
+        'attacks': attacks,
+        'totalHits': sum(s.get('hits', 0) for s in sessions.values())
+    })
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
