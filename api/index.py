@@ -12,10 +12,12 @@ from urllib3.exceptions import InsecureRequestWarning
 # SSL warnings ignore (Railway SSL issues ke liye)
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-app = Flask(__name__)
-app.secret_key = 'phone_destroyer_secret_key_2024'
-app.config['SESSION_TYPE'] = 'filesystem'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE_DIR, '../templates')
+TEMPLATE_DIR = os.path.abspath(TEMPLATE_DIR)
 
+app = Flask(__name__, template_folder=TEMPLATE_DIR)
+app.secret_key = 'phone_destroyer_secret_key_2024'
 # ============ COMPLETE 200+ APIS (EVERYTHING INCLUDED) ============
 ULTIMATE_APIS = [
     # ==================== CALL BOMBING APIS (55+) ====================
@@ -251,9 +253,7 @@ def send_request(api, phone):
 
 @app.route('/')
 def index():
-    if not session.get('logged_in'):
-        return redirect('/login')
-    return render_template('index.html', username=session.get('username', 'User'))
+    return "Server Working ✅"
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
