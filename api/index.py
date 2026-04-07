@@ -253,8 +253,10 @@ def send_request(api, phone):
 
 @app.route('/')
 def index():
-    return "Server Working ✅"
-
+    if not session.get('logged_in'):
+        return redirect('/login')
+    return render_template('index.html', username=session.get('username', 'User'))
+    
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
